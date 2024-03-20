@@ -51,3 +51,9 @@ Usage: python3 py3_synflood_cmd.py -t 10.20.30.40 -p 8080 -c 1
 ![alt tag](https://emreovunc.com/projects/Syn_Flood_01.png)
 
 ![alt tag](https://emreovunc.com/projects/Syn_Flood_02.png)
+
+# Update(2024/03/20)
+Add IPv6 support, you can use command like following
+```
+sudo python3 py3_synflood_cmd.py -t 2001:b030:7140:ac00:ed50:b959:3649:be45 -p 52916 -c 100 -f 6
+```
